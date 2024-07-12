@@ -9,7 +9,7 @@ export const pool: Pool = createPool({
   user: process.env.DB_USER ?? 'user',
   password: process.env.DB_PASSWORD ?? 'password',
   port: Number(process.env.DB_PORT) ?? 3306,
-  connectionLimit: 10,
+  connectionLimit: 100,
 })
 
 const dialect = new MysqlDialect({
