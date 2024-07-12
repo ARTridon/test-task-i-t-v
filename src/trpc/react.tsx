@@ -3,10 +3,12 @@
 import { type AppRouter } from '@/server/api/root'
 import { loggerLink, unstable_httpBatchStreamLink } from '@trpc/client'
 import { createTRPCReact } from '@trpc/react-query'
-import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server'
-import SuperJSON from 'superjson'
 
 import { useState } from 'react'
+
+import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server'
+
+import SuperJSON from 'superjson'
 
 import { type QueryClient, QueryClientProvider } from '@tanstack/react-query'
 

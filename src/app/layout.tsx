@@ -1,9 +1,9 @@
-import { TRPCReactProvider } from '@/trpc/react'
-
 import { type Metadata } from 'next'
 import { Inter as FontSans } from 'next/font/google'
 
 import { type ReactNode } from 'react'
+
+import { TRPCReactProvider } from '@/trpc/react'
 
 import { Toaster } from '@/components/ui/sonner'
 

@@ -1,7 +1,8 @@
-import { createAndUpdateUserSchema, deleteUserScheme, userSchema } from '@/schemas/user-schema'
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc'
 
 import { z } from 'zod'
+
+import { createAndUpdateUserSchema, deleteUserScheme, userSchema } from '@/schemas/user-schema'
 
 import { db } from '@/lib/database/db'
 
