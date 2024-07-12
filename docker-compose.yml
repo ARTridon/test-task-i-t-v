@@ -1,0 +1,35 @@
+version: "3"
+services:
+  db:
+    image: mysql:latest
+    
+    environment:
+      MYSQL_DATABASE: "db"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "password"
+      MYSQL_ROOT_PASSWORD: "password"
+      TZ: "Europe/Kyiv"
+    
+    ports:
+      - "3306:3306"
+    restart: always
+    volumes:
+      - my-db:/var/lib/mysql
+    networks:
+      - my-network
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: "password"
+    ports:
+      - "8080:80"
+    restart: always
+    networks:
+      - my-network
+volumes:
+  my-db:
+
+networks:
+  my-network:
