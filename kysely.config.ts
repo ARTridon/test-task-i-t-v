@@ -1,12 +1,13 @@
 import {
-  DummyDriver,
   MysqlDriver,
   MysqlQueryCompiler,
   MysqlAdapter,
   MysqlIntrospector,
 } from "kysely";
 import { defineConfig } from "kysely-ctl";
-import { pool } from "@/lib/database/db";
+
+//kysely-ctl can not find the path from ts alias path
+import { pool } from "./src/lib/database/db";
 
 export default defineConfig({
   dialect: {
