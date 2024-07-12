@@ -1,6 +1,38 @@
 /** @type {import('prettier').Config & import('prettier-plugin-tailwindcss').PluginOptions} */
 const config = {
-  plugins: ["prettier-plugin-tailwindcss"],
-};
+  plugins: ['prettier-plugin-tailwindcss', '@trivago/prettier-plugin-sort-imports'],
+  printWidth: 100,
+  tabWidth: 2,
+  useTabs: false,
+  semi: false,
+  singleQuote: true,
+  trailingComma: 'es5',
+  bracketSpacing: true,
+  arrowParens: 'always',
+  importOrder: [
+    '^server-only',
+    '^next',
+    '^react',
+    '^axios',
+    '^zod',
+    '^@tanstack',
+    '^date-fns',
+    '^dayjs',
+    'notistack',
+    '^framer-motion',
+    '^next-intl',
+    '^@tabler/icons-react',
+    'class-variance-authority',
+    '^@/components',
+    '^@/i18n',
+    '^@hookform',
+    '^@/store',
+    '^@/lib',
+    '^[./]',
+    '^.*\\.css$',
+  ],
+  importOrderSeparation: true,
+  importOrderSortSpecifiers: true,
+}
 
-export default config;
+export default config

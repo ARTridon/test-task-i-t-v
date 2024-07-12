@@ -1,5 +1,19 @@
-"use client";
-import { Button } from "@/components/ui/button";
+'use client'
+
+import {
+  type CreateAndUpdateUserSchemaType,
+  type UserSchemaType,
+  createAndUpdateUserSchema,
+} from '@/schemas/user-schema'
+import { api } from '@/trpc/react'
+import { toast } from 'sonner'
+
+import { useRouter } from 'next/navigation'
+
+import { type ReactNode, useEffect, useId, useState } from 'react'
+import { useForm } from 'react-hook-form'
+
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -8,14 +22,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { toast } from "sonner";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-
-import { api } from "@/trpc/react";
-
+} from '@/components/ui/dialog'
 import {
   Form,
   FormControl,
@@ -23,78 +30,66 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 
-import { Input } from "@/components/ui/input";
-import {
-  type ReactNode,
-  useEffect,
-  useId,
-  useState,
-} from "react";
-import {
-  createAndUpdateUserSchema,
-  type CreateAndUpdateUserSchemaType,
-  type UserSchemaType,
-} from "@/schemas/user-schema";
-import { useRouter } from "next/navigation";
+import { zodResolver } from '@hookform/resolvers/zod'
 
 type UserCreateAndUpdateDialogPropsType = {
-  children: ReactNode;
-  title: string;
-  defaultValues?: UserSchemaType;
-};
+  children: ReactNode
+  title: string
+  defaultValues?: UserSchemaType
+}
 
 export const UserCreateAndUpdateDialog = ({
   children,
   title,
   defaultValues,
 }: UserCreateAndUpdateDialogPropsType) => {
-  const router = useRouter();
-  const formID = useId();
-  const [open, setOpen] = useState(false);
+  const router = useRouter()
+  const formID = useId()
+  const [open, setOpen] = useState(false)
   const { mutate: createUserAction } = api.user.create.useMutation({
     onSuccess: ({ message }) => {
-      if (message === "User created successfully") {
-        form.reset();
-        setOpen(false);
-        toast.success(message);
-        router.refresh();
+      if (message === 'User created successfully') {
+        form.reset()
+        setOpen(false)
+        toast.success(message)
+        router.refresh()
       }
-      if (message === "User already exists") {
-        toast.info(message);
+      if (message === 'User already exists') {
+        toast.info(message)
       }
     },
     onError: ({ message }) => {
-      toast.error(message);
+      toast.error(message)
     },
-  });
+  })
 
   const { mutate: updateUserAction } = api.user.update.useMutation({
     onSuccess: ({ message }) => {
-      if (message === "User updated successfully") {
-        form.reset();
-        setOpen(false);
-        toast.success(message);
-        router.refresh();
-
+      if (message === 'User updated successfully') {
+        form.reset()
+        setOpen(false)
+        toast.success(message)
+        router.refresh()
       }
-      if (message === "User update failed") {
-        toast.error(message);
+      if (message === 'User update failed') {
+        toast.error(message)
       }
     },
     onError: ({ message }) => {
-      toast.error(message);
+      toast.error(message)
     },
-  });
+  })
 
   const form = useForm<CreateAndUpdateUserSchemaType>({
     resolver: zodResolver(createAndUpdateUserSchema),
-  });
+  })
 
   useEffect(() => {
-    if (!!defaultValues) form.reset(defaultValues);
-  }, [defaultValues, form]);
+    if (!!defaultValues) form.reset(defaultValues)
+  }, [defaultValues, form])
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -106,9 +101,9 @@ export const UserCreateAndUpdateDialog = ({
           <form
             onSubmit={form.handleSubmit(async (values) => {
               if (!!defaultValues) {
-                updateUserAction(values);
+                updateUserAction(values)
               } else {
-                createUserAction(values);
+                createUserAction(values)
               }
             })}
             className="space-y-8"
@@ -154,5 +149,5 @@ export const UserCreateAndUpdateDialog = ({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

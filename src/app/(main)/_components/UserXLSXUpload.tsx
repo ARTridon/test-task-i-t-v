@@ -1,65 +1,65 @@
-import * as XLSX from "xlsx";
-import { Upload } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { api } from "@/trpc/react";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { type ChangeEvent, useRef } from "react";
+import { api } from '@/trpc/react'
+import { Upload } from 'lucide-react'
+import { toast } from 'sonner'
+import * as XLSX from 'xlsx'
+
+import { useRouter } from 'next/navigation'
+
+import { type ChangeEvent, useRef } from 'react'
+
+import { Button } from '@/components/ui/button'
 
 type SheetDataType = Array<{
-  Name: string;
-  Email: string;
-  "Created At": string;
-}>;
+  Name: string
+  Email: string
+  'Created At': string
+}>
 
 export const UserXLSXUpload = () => {
-  const ref = useRef<HTMLInputElement>(null);
-  const router = useRouter();
+  const ref = useRef<HTMLInputElement>(null)
+  const router = useRouter()
   const { mutate } = api.user.uploadXLSX.useMutation({
     onSuccess: ({ message }) => {
-      console.log(message);
+      console.log(message)
 
-      if (message === "Users uploaded successfully") {
-        toast.success(message);
+      if (message === 'Users uploaded successfully') {
+        toast.success(message)
         if (ref.current) {
-          ref.current.value = "";
+          ref.current.value = ''
         }
-        router.refresh();
+        router.refresh()
       }
     },
-  });
+  })
 
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
+    const target = e.target as HTMLInputElement
     if (target.files) {
-      const file = target.files[0]!;
+      const file = target.files[0]!
 
-      const reader = new FileReader();
+      const reader = new FileReader()
 
       reader.onload = (event: ProgressEvent<FileReader>) => {
         if (event.target?.result) {
-          const workbook = XLSX.read(event.target.result, { type: "binary" });
-          const sheetName = workbook.SheetNames[0];
-          const sheet = workbook.Sheets[sheetName!];
-          const sheetData = XLSX.utils.sheet_to_json(sheet!) as SheetDataType;
+          const workbook = XLSX.read(event.target.result, { type: 'binary' })
+          const sheetName = workbook.SheetNames[0]
+          const sheet = workbook.Sheets[sheetName!]
+          const sheetData = XLSX.utils.sheet_to_json(sheet!) as SheetDataType
           const data = sheetData.map((user) => ({
             name: user.Name,
             email: user.Email,
-            created_at: user["Created At"] as unknown as Date,
-          }));
-          mutate(data);
+            created_at: user['Created At'] as unknown as Date,
+          }))
+          mutate(data)
         }
-      };
+      }
 
-      reader.readAsBinaryString(file);
+      reader.readAsBinaryString(file)
     }
-  };
+  }
 
   return (
-    <Button
-      className="relative flex items-center justify-between gap-1"
-      variant="outline"
-    >
+    <Button className="relative flex items-center justify-between gap-1" variant="outline">
       <input
         ref={ref}
         className="absolute inset-0 opacity-0"
@@ -69,5 +69,5 @@ export const UserXLSXUpload = () => {
       <Upload />
       Upload XLSX
     </Button>
-  );
-};
+  )
+}
