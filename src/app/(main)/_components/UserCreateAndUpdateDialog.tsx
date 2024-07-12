@@ -1,15 +1,11 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useCreateUserAction, useUpdateUserAction } from '@/hooks/useUserAction'
 
 import { type ReactNode, useEffect, useId, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { toast } from 'sonner'
-
 import { zodResolver } from '@hookform/resolvers/zod'
-
-import { api } from '@/trpc/react'
 
 import {
   type CreateAndUpdateUserSchemaType,
@@ -48,45 +44,25 @@ export const UserCreateAndUpdateDialog = ({
   title,
   defaultValues,
 }: UserCreateAndUpdateDialogPropsType) => {
-  const router = useRouter()
   const formID = useId()
   const [open, setOpen] = useState(false)
-  const { mutate: createUserAction } = api.user.create.useMutation({
-    onSuccess: ({ message }) => {
-      if (message === 'User created successfully') {
-        form.reset()
-        setOpen(false)
-        toast.success(message)
-        router.refresh()
-      }
-      if (message === 'User already exists') {
-        toast.info(message)
-      }
-    },
-    onError: ({ message }) => {
-      toast.error(message)
-    },
-  })
-
-  const { mutate: updateUserAction } = api.user.update.useMutation({
-    onSuccess: ({ message }) => {
-      if (message === 'User updated successfully') {
-        form.reset()
-        setOpen(false)
-        toast.success(message)
-        router.refresh()
-      }
-      if (message === 'User update failed') {
-        toast.error(message)
-      }
-    },
-    onError: ({ message }) => {
-      toast.error(message)
-    },
-  })
 
   const form = useForm<CreateAndUpdateUserSchemaType>({
     resolver: zodResolver(createAndUpdateUserSchema),
+  })
+
+  const { mutate: createUserAction } = useCreateUserAction({
+    successfullyCallback: () => {
+      form.reset()
+      setOpen(false)
+    },
+  })
+
+  const { mutate: updateUserAction } = useUpdateUserAction({
+    successfullyCallback: () => {
+      form.reset()
+      setOpen(false)
+    },
   })
 
   useEffect(() => {
