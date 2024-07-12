@@ -2,8 +2,10 @@
 
 import { useCreateUserAction, useUpdateUserAction } from '@/hooks/useUserAction'
 
-import { type ReactNode, useEffect, useId, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import { useForm } from 'react-hook-form'
+
+import { Pencil } from 'lucide-react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -13,16 +15,8 @@ import {
   createAndUpdateUserSchema,
 } from '@/schemas/user-schema'
 
+import { DialogWrapper } from '@/components/DialogWrapper'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
 import {
   Form,
   FormControl,
@@ -34,13 +28,11 @@ import {
 import { Input } from '@/components/ui/input'
 
 type UserCreateAndUpdateDialogPropsType = {
-  children: ReactNode
   title: string
   defaultValues?: UserSchemaType
 }
 
 export const UserCreateAndUpdateDialog = ({
-  children,
   title,
   defaultValues,
 }: UserCreateAndUpdateDialogPropsType) => {
@@ -69,63 +61,65 @@ export const UserCreateAndUpdateDialog = ({
     if (!!defaultValues) form.reset(defaultValues)
   }, [defaultValues, form])
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-        </DialogHeader>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(async (values) => {
-              if (!!defaultValues) {
-                updateUserAction(values)
-              } else {
-                createUserAction(values)
-              }
-            })}
-            className="space-y-8"
-            id={formID}
-          >
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </form>
-        </Form>
-        <DialogFooter>
-          <Button form={formID} type="submit">
-            Save
+    <DialogWrapper
+      open={open}
+      setOpen={setOpen}
+      title={title}
+      btnTrigger={
+        !!defaultValues ? (
+          <Button className="cursor-pointer" variant="ghost" size={'icon'} asChild>
+            <Pencil />
           </Button>
-          <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              Close
-            </Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        ) : (
+          <Button variant="default">Create New</Button>
+        )
+      }
+      btnSubmit={
+        <Button form={formID} type="submit">
+          Save
+        </Button>
+      }
+    >
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(async (values) => {
+            if (!!defaultValues) {
+              updateUserAction(values)
+            } else {
+              createUserAction(values)
+            }
+          })}
+          className="space-y-8"
+          id={formID}
+        >
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </form>
+      </Form>
+    </DialogWrapper>
   )
 }

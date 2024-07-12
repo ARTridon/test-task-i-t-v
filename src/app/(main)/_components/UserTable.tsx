@@ -2,13 +2,12 @@
 
 import { useEffect, useState } from 'react'
 
-import { Pencil, Trash } from 'lucide-react'
+import { Trash } from 'lucide-react'
 
 import {
   type ColumnDef,
   type ColumnFiltersState,
   type VisibilityState,
-  flexRender,
   getCoreRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
@@ -30,14 +29,6 @@ import { UserXLSXUpload } from '@/app/(main)/_components/UserXLSXUpload'
 import { TableColumnHeader } from '@/components/table-helpers/TableColumnHeader'
 import { TableWrapper } from '@/components/table-helpers/TableWrapper'
 import { Button } from '@/components/ui/button'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 
 type UserTablePropsType = {
   users: UserSchemaType[]
@@ -86,11 +77,7 @@ export const UserTable = ({ users }: UserTablePropsType) => {
       header: () => <TableColumnHeader title="Action" />,
       cell: ({ row }) => (
         <div className="flex items-center gap-3">
-          <UserCreateAndUpdateDialog title="Create User" defaultValues={row.original}>
-            <Button className="cursor-pointer" variant="ghost" size={'icon'} asChild>
-              <Pencil />
-            </Button>
-          </UserCreateAndUpdateDialog>
+          <UserCreateAndUpdateDialog title="Create User" defaultValues={row.original} />
           <UserDeleteDialog id={row.original.id!} name={row.original.name}>
             <Button className="cursor-pointer text-red-600" variant="ghost" size={'icon'} asChild>
               <Trash />
@@ -137,11 +124,8 @@ export const UserTable = ({ users }: UserTablePropsType) => {
   return (
     <section className="h-screen max-h-screen space-y-4 p-3">
       <div className="flex w-full items-center justify-end gap-x-3">
-        <UserCreateAndUpdateDialog title="Create User">
-          <Button variant="default">Create New</Button>
-        </UserCreateAndUpdateDialog>
+        <UserCreateAndUpdateDialog title="Create User" />
         <UserXLSXUpload />
-
         <UserDeleteAllButton userCount={users.length} />
       </div>
       <div className="rounded-md border py-3">

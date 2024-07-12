@@ -8,17 +8,8 @@ import { toast } from 'sonner'
 
 import { api } from '@/trpc/react'
 
+import { DialogWrapper } from '@/components/DialogWrapper'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
 
 type UserDeleteDialogDialogPropsType = {
   children: ReactNode
@@ -44,20 +35,13 @@ export const UserDeleteDialog = ({ children, name, id }: UserDeleteDialogDialogP
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Delete</DialogTitle>
-          <DialogDescription>Delete user {name}</DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <Button onClick={handleDelete}>Delete</Button>
-          <DialogClose asChild>
-            <Button variant="secondary">Close</Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <DialogWrapper
+      open={open}
+      setOpen={setOpen}
+      title={'Delete'}
+      description={`Delete user ${name}`}
+      btnSubmit={<Button onClick={handleDelete}>Delete</Button>}
+      btnTrigger={children}
+    />
   )
 }
