@@ -1,13 +1,13 @@
 'use client'
 
-import { useCreateUserAction, useUpdateUserAction } from '@/hooks/useUserAction'
-
 import { useEffect, useId, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Pencil } from 'lucide-react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+
+import { useCreateUserAction, useUpdateUserAction } from '@/hooks/useUserAction'
 
 import {
   type CreateAndUpdateUserSchemaType,
@@ -16,16 +16,9 @@ import {
 } from '@/schemas/user-schema'
 
 import { DialogWrapper } from '@/components/DialogWrapper'
+import { FormWrapper } from '@/components/FormWrapper'
+import { InputWrapper } from '@/components/InputWrapper'
 import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 
 type UserCreateAndUpdateDialogPropsType = {
   title: string
@@ -60,6 +53,7 @@ export const UserCreateAndUpdateDialog = ({
   useEffect(() => {
     if (!!defaultValues) form.reset(defaultValues)
   }, [defaultValues, form])
+
   return (
     <DialogWrapper
       open={open}
@@ -80,46 +74,21 @@ export const UserCreateAndUpdateDialog = ({
         </Button>
       }
     >
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(async (values) => {
-            if (!!defaultValues) {
-              updateUserAction(values)
-            } else {
-              createUserAction(values)
-            }
-          })}
-          className="space-y-8"
-          id={formID}
-        >
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter your name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter your email" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </form>
-      </Form>
+      <FormWrapper<CreateAndUpdateUserSchemaType>
+        handleSubmit={async (values) => {
+          if (!!defaultValues) {
+            updateUserAction(values)
+          } else {
+            createUserAction(values)
+          }
+        }}
+        formID={formID}
+        schema={createAndUpdateUserSchema}
+        defaultValues={defaultValues}
+      >
+        <InputWrapper name="name" label="Name" placeholder="Enter your name" />
+        <InputWrapper name="email" label="Email" placeholder="Enter your email" />
+      </FormWrapper>
     </DialogWrapper>
   )
 }

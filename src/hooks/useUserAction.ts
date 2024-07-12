@@ -4,10 +4,6 @@ import { toast } from 'sonner'
 
 import { api } from '@/trpc/react'
 
-type ParamsType = {
-  successfullyCallback: () => void
-}
-
 export const useCreateUserAction = ({ successfullyCallback }: ParamsType) => {
   const router = useRouter()
   return api.user.create.useMutation({
@@ -42,6 +38,18 @@ export const useUpdateUserAction = ({ successfullyCallback }: ParamsType) => {
     },
     onError: ({ message }) => {
       toast.error(message)
+    },
+  })
+}
+
+export const useDeleteUserAction = () => {
+  const router = useRouter()
+  return api.user.delete.useMutation({
+    onSuccess: ({ message }) => {
+      if (message === 'User deleted successfully') {
+        toast.success(message)
+        router.refresh()
+      }
     },
   })
 }

@@ -1,5 +1,6 @@
-import { Kysely, MysqlDialect } from 'kysely'
 import { type Pool, createPool } from 'mysql2'
+
+import { Kysely, MysqlDialect } from 'kysely'
 
 import { type Database } from './types'
 

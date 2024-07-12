@@ -1,0 +1,3 @@
+type ParamsType = {
+  successfullyCallback: () => void
+}

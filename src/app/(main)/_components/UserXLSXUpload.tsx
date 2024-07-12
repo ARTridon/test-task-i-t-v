@@ -1,14 +1,10 @@
-import * as XLSX from 'xlsx'
-
-import { useRouter } from 'next/navigation'
-
 import { type ChangeEvent, useRef } from 'react'
 
-import { toast } from 'sonner'
+import * as XLSX from 'xlsx'
 
 import { Upload } from 'lucide-react'
 
-import { api } from '@/trpc/react'
+import { useUploadXLSXAction } from '@/hooks/useXLSXAction'
 
 import { Button } from '@/components/ui/button'
 
@@ -20,17 +16,10 @@ type SheetDataType = Array<{
 
 export const UserXLSXUpload = () => {
   const ref = useRef<HTMLInputElement>(null)
-  const router = useRouter()
-  const { mutate } = api.user.uploadXLSX.useMutation({
-    onSuccess: ({ message }) => {
-      console.log(message)
-
-      if (message === 'Users uploaded successfully') {
-        toast.success(message)
-        if (ref.current) {
-          ref.current.value = ''
-        }
-        router.refresh()
+  const { mutate } = useUploadXLSXAction({
+    successfullyCallback: () => {
+      if (ref.current) {
+        ref.current.value = ''
       }
     },
   })
