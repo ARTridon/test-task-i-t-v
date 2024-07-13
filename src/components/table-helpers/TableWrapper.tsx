@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import { type Table as TableType, flexRender } from "@tanstack/react-table";
+import { type Table as TableType, flexRender } from '@tanstack/react-table'
 
 import {
   Table,
@@ -9,13 +9,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table'
 
 type TableWrapperPropsType<TData> = {
-  table: TableType<TData>;
-  notFoundText?: string;
-  colSpan: number;
-};
+  table: TableType<TData>
+  notFoundText?: string
+  colSpan: number
+}
 
 export const TableWrapper = <TData,>({
   table,
@@ -32,12 +32,9 @@ export const TableWrapper = <TData,>({
                 <TableHead className="top-0" key={header.id} colSpan={header.colSpan}>
                   {header.isPlaceholder
                     ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
+                    : flexRender(header.column.columnDef.header, header.getContext())}
                 </TableHead>
-              );
+              )
             })}
           </TableRow>
         ))}
@@ -56,11 +53,11 @@ export const TableWrapper = <TData,>({
         ) : (
           <TableRow>
             <TableCell colSpan={colSpan} className="h-24 text-center">
-              {notFoundText ? notFoundText : "Not Found."}
+              {notFoundText ? notFoundText : 'Not Found.'}
             </TableCell>
           </TableRow>
         )}
       </TableBody>
     </Table>
-  );
-};
+  )
+}
