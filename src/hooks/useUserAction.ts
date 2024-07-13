@@ -16,6 +16,9 @@ export const useCreateUserAction = ({ successfullyCallback }: ParamsType) => {
       if (message === 'User already exists') {
         toast.info(message)
       }
+      if (message === 'User creation failed') {
+        toast.error(message)
+      }
     },
     onError: ({ message }) => {
       toast.error(message)
@@ -31,6 +34,9 @@ export const useUpdateUserAction = ({ successfullyCallback }: ParamsType) => {
         toast.success(message)
         router.refresh()
         successfullyCallback && successfullyCallback()
+      }
+      if (message === 'User already exists') {
+        toast.info(message)
       }
       if (message === 'User update failed') {
         toast.error(message)

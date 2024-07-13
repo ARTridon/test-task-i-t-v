@@ -17,10 +17,8 @@ export const userRouter = createTRPCRouter({
       try {
         await db.insertInto('user').values(input).executeTakeFirstOrThrow()
         return { message: 'User created successfully' }
-      } catch (error) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        if (error.sqlState === '23000') {
+      } catch (error: unknown) {
+        if ((error as KyselyError).sqlState === '23000') {
           return { message: 'User already exists' }
         }
         return { message: 'User creation failed' }
@@ -33,6 +31,10 @@ export const userRouter = createTRPCRouter({
       await db.updateTable('user').set(body).where('id', '=', id!).executeTakeFirstOrThrow()
       return { message: 'User updated successfully' }
     } catch (error) {
+      if ((error as KyselyError).sqlState === '23000') {
+        return { message: 'User already exists' }
+      }
+
       return { message: 'User update failed' }
     }
   }),
